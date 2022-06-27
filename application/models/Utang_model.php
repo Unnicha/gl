@@ -68,7 +68,7 @@
 		{
 			return $this->db->join('pembelian', 'pembelian.faktur_beli = utang_bayar.faktur_beli')
 							->where('utang_bayar.kode_transaksi', $kode_transaksi)
-							->order_by('kode_bayar')
+							->order_by('kode_sub_bayar')
 							->get('utang_bayar')->result_array();
 		}
 		
@@ -161,7 +161,7 @@
 			foreach ($faktur_beli as $key => $faktur) {
 				$pembelian	= $this->getPembelian($faktur);
 				$bayar[]	= [
-					'kode_bayar'		=> $kode_transaksi . sprintf('%02s', ++$num),
+					'kode_sub_bayar'		=> $kode_transaksi . sprintf('%02s', ++$num),
 					'kode_transaksi'	=> $kode_transaksi,
 					'faktur_beli'		=> $faktur,
 					'jenis_ppn'			=> $pembelian['jenis_ppn'],

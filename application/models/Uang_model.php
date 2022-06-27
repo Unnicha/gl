@@ -105,7 +105,7 @@
 				['kode' =>'VND', 'nama' => 'Dong Vietnam',],
 				['kode' =>'AMD', 'nama' => 'Dram Armenia',],
 				['kode' =>'CVE', 'nama' => 'Escudo Tanjung Verde',],
-				['kode' =>'EUR', 'nama' => 'Euro ',],
+				['kode' =>'EUR', 'nama' => 'Euro',],
 				['kode' =>'AWG', 'nama' => 'Forint Aruba',],
 				['kode' =>'HUF', 'nama' => 'Forint Hongaria',],
 				['kode' =>'XOF', 'nama' => 'Franc Afrika Barat',],

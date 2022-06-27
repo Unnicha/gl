@@ -3,5 +3,6 @@
     
     <div class="content-body">
         Hello World!
+		<?php print_r($this->session->userdata()) ?>
     </div>
 </div>

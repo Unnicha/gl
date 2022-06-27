@@ -30,9 +30,10 @@
 				$akses	= $this->perusahaan->getById($akses);
 			}
 			
-			$data['title']		= 'Pilih Perusahaan';
-			$data['perusahaan']	= $akses;
-			$data['bulan']		= Globals::bulan();
+			$data['title']			= 'Pilih Perusahaan';
+			$data['perusahaan']		= $akses;
+			$data['bulan']			= Globals::bulan();
+			$data['redirect_to']	= $this->session->userdata('redirect_to');
 			
 			$this->form_validation->set_rules('perusahaan', 'Perusahaan', 'required');
 			$this->form_validation->set_rules('tahun', 'Tahun', 'required');
@@ -57,7 +58,10 @@
 				];
 				$this->session->set_userdata($sess);
 				
-				redirect('home');
+				// $redirect_to = $this->session->userdata('redirect_to');
+				$redirect_to = $this->input->post('redirect_to');
+				
+				redirect($redirect_to ? $redirect_to : 'home');
 			}
 		}
 		
@@ -68,6 +72,7 @@
 			$data['title']		= 'Pindah Bulan';
 			$data['perusahaan']	= $this->perusahaan->getSetupByPerusahaan($this->session->userdata('kode_perusahaan'));
 			$data['bulan']		= Globals::bulan();
+			$data['redirect_to'] = $_SERVER['HTTP_REFERER'];
 			
 			$this->form_validation->set_rules('tahun', 'Tahun', 'required');
 			$this->form_validation->set_rules('bulan', 'Bulan', 'required');
@@ -83,7 +88,8 @@
 				];
 				$this->session->set_userdata($sess);
 				
-				redirect('home');
+				$redirect_to = $this->input->post('redirect_to', true);
+				redirect($redirect_to ? $redirect_to : 'home');
 			}
 		}
 		

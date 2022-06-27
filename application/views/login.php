@@ -21,6 +21,8 @@
 					<?= ($this->session->flashdata('pesan')) ? $this->session->flashdata('pesan') : '' ?>
 					
 					<form method="post" class="login-form validate-form flex-sb flex-w">
+						<input type="hidden" name="redirect_to" value="<?= $redirect_to ?>">
+						
 						<label class="label-input">Username</label>
 						<div class="wrap-input validate-input mb-3" data-validate = "Username is required">
 							<input class="input" type="text" name="username" >

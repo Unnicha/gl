@@ -93,8 +93,8 @@
 			},
 			'columns' : [
 				{ name: 'num' },
-				{ name: 'tanggal_transaksi' },
-				{ name: 'piutang.kode_transaksi' },
+				{ name: 'tanggal_bayar' },
+				{ name: 'piutang.kode_bayar' },
 				{ name: 'faktur_jual' },
 				{ name: 'jumlah_bayar' },
 				{ name: 'act' },
@@ -102,7 +102,6 @@
 			'scrollX'			: true,
 			'scrollCollapse'	: true,
 			'columnDefs'		: [
-				{ 'class': 'text-right px-3', 'targets': [5] },
 				{ 'sortable': false, 'targets': [0,5, 6] },
 			],
 			// 'dom'			: '<"row mb-2"<"col"B>>'

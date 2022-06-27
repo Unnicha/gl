@@ -1,58 +1,47 @@
-<div class="content container-fluid">
-	<?php if($this->session->flashdata('notification')) : ?>
-		<div class="notification" data-val="yes"></div>
-	<?php endif; ?>
-	<?php if($this->session->flashdata('warning')) : ?>
-		<div class="warning" data-val="yes"></div>
-	<?php endif; ?>
-	
-	<div class="row content-title">
-		<div class="col-sm">
-			<div class="mb-2 mb-sm-0"><?= $title ?></div>
-		</div>
-			
-		<div class="col-sm-auto">
-			<a href="<?= base_url() ?>laporan_penjualan/tampilan" class="btn btn-sm btn-primary">
-				Ganti Tampilan
-			</a> 
-		</div>
+<h5 class="text-center"><?= $setting['header'] ?></h5>
+<p class="text-center mb-0"><?= $setting['tanggal'] ?></p>
+
+<div class="row mb-3">
+	<div class="col-md">
+		<p class="mb-0">Pelanggan : <?= $setting['pelanggan'] ?></p>
+		<p class="mb-0">Barang : <?= $setting['barang'] ?></p>
 	</div>
-	
-	<div class="card shadow mb-3">
-		<div class=" card-body tab-content">
-			<table id="myTable" width=100% class="table table-list table-striped table-bordered mt-3 nowrap">
-				<thead class="text-center">
-					<tr>
-						<th>No.</th>
-						<th>Tanggal</th>
-						<th>Faktur Jual</th>
-						<th>Surat Jalan</th>
-						<th>Pelanggan</th>
-						<th>Kode Barang</th>
-						<th>Nama Barang</th>
-						<th>Qty</th>
-						<th>Satuan</th>
-						<th>Harga Satuan</th>
-						<th>Diskon</th>
-						<th>Jumlah</th>
-						<th>Diskon Luar</th>
-						<th>DPP</th>
-						<th>% PPN</th>
-						<th>Nilai PPN</th>
-						<th>Total</th>
-					</tr>
-				</thead>
-				
-				<tbody class="text-center">
-				</tbody>
-			</table>
-		</div>
+	<div class="col-md-4">
+		<p class="mb-0">Jenis Pajak : <?= $setting['pajak'] ?></p>
+		<p class="mb-0">Mata Uang : <?= $setting['mata_uang'] ?></p>
 	</div>
 </div>
 
+<table id="myTable" width=100% class="table table-list table-striped table-bordered mt-3 nowrap">
+	<thead class="text-center">
+		<tr>
+			<th>No.</th>
+			<th>Tanggal</th>
+			<th>Faktur Jual</th>
+			<th>Surat Jalan</th>
+			<th>Pelanggan</th>
+			<th>Kode Barang</th>
+			<th>Nama Barang</th>
+			<th>Qty</th>
+			<th>Satuan</th>
+			<th>Harga Satuan</th>
+			<th>Diskon</th>
+			<th>Jumlah</th>
+			<!-- <th>Diskon Luar</th> -->
+			<th>DPP</th>
+			<th>% PPN</th>
+			<th>Nilai PPN</th>
+			<th>Total</th>
+		</tr>
+	</thead>
+	
+	<tbody class="text-center">
+	</tbody>
+</table>
+
 <!-- Detail Proses -->
 <div class="modal fade modalDetail" tabindex="-1" aria-labelledby="modalDetailLabel" aria-hidden="true">
-	<div class="modal-dialog modal-xl modal-dialog-scrollable modal-lg">
+	<div class="modal-dialog modal-xl modal-dialog-scrollable">
 		<div class="modal-content showDetail">
 			<!-- Tampilkan Data -->
 		</div>
@@ -61,8 +50,8 @@
 
 <script type="text/javascript" src="<?= base_url() ?>asset/js/dataTables.min.js"></script>
 <script type="text/javascript" src="<?= base_url() ?>asset/js/dataTables.bootstrap4.min.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>asset/js/dataTables.fixedColumns.min.js"></script>
-<script type="text/javascript" src="<?= base_url() ?>asset/js/dataTables.buttons.min.js"></script>
+<!-- <script type="text/javascript" src="<?= base_url() ?>asset/js/dataTables.fixedColumns.min.js"></script> -->
+<!-- <script type="text/javascript" src="<?= base_url() ?>asset/js/dataTables.buttons.min.js"></script> -->
 <script> 
 	$(document).ready(function () {
 		//pop up message success
@@ -83,7 +72,7 @@
 			// 'ordering'		: false,
 			'searching'		: false,
 			'lengthChange'	: false,
-			'order'			: [[1, 'desc'], [2, 'desc']],
+			'order'			: [[1, 'asc'], [2, 'asc']],
 			'pageLength'	: 10,
 			'ajax'			: {
 				'url'	: '<?= base_url() ?>laporan_penjualan/table',
@@ -105,7 +94,7 @@
 				{ name: 'harga_produk' },
 				{ name: 'diskon_produk' },
 				{ name: 'jumlah_produk' },
-				{ name: 'diskon_luar' },
+				// { name: 'diskon_luar' },
 				{ name: 'dpp' },
 				{ name: 'besar_ppn' },
 				{ name: 'nilai_ppn' },
@@ -114,7 +103,6 @@
 			'scrollX'			: true,
 			'scrollCollapse'	: true,
 			'columnDefs'		: [
-				{ 'class': 'text-right', 'targets': [9,10,11,12,13,15,16] },
 				{ 'sortable': false, 'targets': [0] },
 			],
 			// 'dom'			: '<"row mb-2"<"col"B>>'

@@ -17,11 +17,11 @@
 						</tr>
 						<tr>
 							<td scope="row" class="title">Tanggal Transaksi</td>
-							<td><?=$transaksi['tanggal_transaksi']?></td>
+							<td><?=$transaksi['tanggal_bayar']?></td>
 						</tr>
 						<tr>
 							<td scope="row" class="title">Kode Transaksi</td>
-							<td><?=$transaksi['kode_transaksi']?></td>
+							<td><?=$transaksi['kode_bayar']?></td>
 						</tr>
 						<tr>
 							<td scope="row" class="title">Jenis Saldo</td>
@@ -60,7 +60,7 @@
 						</tr>
 						<tr>
 							<td scope="row" class="title">Keterangan</td>
-							<td><?=$transaksi['ket_transaksi']?></td>
+							<td><?=$transaksi['ket_bayar']?></td>
 						</tr>
 					</tbody>
 				</table>

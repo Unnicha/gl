@@ -25,6 +25,7 @@
 					
 					<form method="post" class="login-form validate-form flex-sb flex-w">
 						<input type="hidden" id="base_url" value="<?= base_url() ?>">
+						<input type="hidden" name="redirect_to" value="<?= $redirect_to ?>">
 						
 						<div class="form-group row">
 							<div class="col">

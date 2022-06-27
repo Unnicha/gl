@@ -6,9 +6,10 @@
 		{
 			parent::__construct();
 			$this->libtemplate->user_check();
-			$this->load->model('Laporan_penjualan_model', 'laporan');
+			$this->load->model('M_laporan_penjualan', 'laporan');
 			$this->load->model('Pelanggan_model', 'pelanggan');
 			$this->load->model('Barang_model', 'barang');
+			$this->load->model('Uang_model', 'mata_uang');
 			$this->load->library('form_validation');
 			$this->form_validation->set_error_delimiters('<small class="text-danger">', '</small>');
 			
@@ -17,51 +18,47 @@
 			$this->max_date	= isset($_SESSION['tahun_aktif']) ? date('t/m/Y', strtotime('12/01/'.$_SESSION['tahun_aktif'])) : '';
 		}
 		
-		public function index()
-		{
-			$sess	= $this->session->userdata('laporan_penjualan');
-			if ($sess) {
-				$view	= $sess['jenis_transaksi'].'_'.$sess['jenis_laporan'];
-				
-				$transaksi	= ($sess['jenis_transaksi'] == 'penjualan') ? ' Penjualan' : ' Retur Penjualan';
-				$pelanggan	= $this->pelanggan->getById($sess['pelanggan']);
-				$barang		= $this->barang->getById($sess['barang']);
-				$setting['header']		= 'Laporan ' . ucwords($sess['jenis_laporan']) . $transaksi;
-				$setting['tanggal']		= $sess['tanggal_awal'].' - '.$sess['tanggal_akhir'];
-				$setting['pelanggan']	= ($pelanggan) ? $pelanggan['nama_pelanggan'] : 'Semua';
-				$setting['barang']		= ($barang) ? $barang['nama_barang'] : 'Semua';
-				$setting['pajak']		= ($sess['jenis_pajak']) ? $sess['jenis_pajak'] : "Semua";
-				
-				$data['title']		= 'Laporan Penjualan & Retur';
-				$data['setting']	= $setting;
-				$this->libtemplate->main('laporan_penjualan/'.$view, $data);
-			} else {
-				redirect('laporan_penjualan/tampilan');
-			}
+		public function index() {
+			// $this->session->unset_userdata('laporan_penjualan');
+			$data['title']	= 'Laporan Penjualan & Retur';
+			$this->libtemplate->main('laporan_penjualan/index', $data);
 		}
 
-		public function tampilan()
+		public function ganti()
 		{
-			$data['title']		= 'Laporan Penjualan & Retur';
 			$data['pelanggan']	= $this->pelanggan->getAll();
 			$data['barang']		= $this->barang->getAll();
+			$data['mata_uang']	= $this->mata_uang->getAll();
 			$data['min_date']	= $this->min_date;
 			$data['max_date']	= $this->max_date;
 			
-			$this->form_validation->set_rules('jenis_transaksi', 'Jenis Transaksi', 'required');
-			$this->form_validation->set_rules('jenis_laporan', 'Jenis Laporan', 'required');
-			$this->form_validation->set_rules('tanggal_awal', 'Tanggal Awal', 'required');
-			$this->form_validation->set_rules('tanggal_akhir', 'Tanggal Akhir', 'required');
-			$this->form_validation->set_rules('jenis_pajak', 'Jenis Pajak', '');
-			$this->form_validation->set_rules('pelanggan', 'Pelanggan', '');
-			$this->form_validation->set_rules('barang', 'Barang', '');
+			$this->load->view('laporan_penjualan/filter', $data);
+		}
+		
+		public function display()
+		{
+			$ids	= $this->input->post('id', true);
+			$values	= $this->input->post('value', true);
+			$filter	= array_combine($ids, $values);
+			$this->session->set_userdata('laporan_penjualan', $filter);
 			
-			if($this->form_validation->run() == FALSE) {
-				$this->libtemplate->main('laporan_penjualan/index', $data);
-			} else {
-				$this->session->set_userdata(['laporan_penjualan' => $this->input->post()]);
-				redirect('laporan_penjualan');
-			}
+			$view	= $filter['jenis_transaksi'].'_'.$filter['jenis_laporan'];
+			
+			$transaksi	= ($filter['jenis_transaksi'] == 'penjualan') ? 'Penjualan ' : 'Retur Penjualan ';
+			$pelanggan	= $this->pelanggan->getById($filter['pelanggan']);
+			$barang		= $this->barang->getById($filter['barang']);
+			$mata_uang	= $this->mata_uang->getById($filter['mata_uang']);
+			
+			$setting['header']		= 'Laporan '.$transaksi . ucwords($filter['jenis_laporan']);
+			$setting['tanggal']		= $filter['tanggal_awal'].' - '.$filter['tanggal_akhir'];
+			$setting['pajak']		= $filter['jenis_pajak'] ? $filter['jenis_pajak'] : "Semua";
+			$setting['pelanggan']	= $pelanggan ? $pelanggan['nama_pelanggan'] : 'Semua';
+			$setting['barang']		= $barang ? $barang['nama_barang'] : 'Semua';
+			$setting['mata_uang']	= $mata_uang ? $mata_uang['nama_mu'] : 'Semua';
+			
+			$data['title']		= 'Laporan Penjualan & Retur';
+			$data['setting']	= $setting;
+			$this->load->view('laporan_penjualan/'.$view, $data);
 		}
 		
 		public function table()
@@ -78,21 +75,18 @@
 				$order[]	= $order_by.' '.$order_dir;
 			}
 			$order	= implode(',', $order);
+			
+			// filter yang akan dikirim ke model
 			$filter	= $this->session->userdata('laporan_penjualan');
 			$filter['tanggal_awal']		= Globals::dateFormat($filter['tanggal_awal']);
 			$filter['tanggal_akhir']	= Globals::dateFormat($filter['tanggal_akhir']);
 			$filter['jenis_pajak']		= ($filter['jenis_pajak'] == 'PPN') ? ['Include', 'Exclude'] : $filter['jenis_pajak'];
 			
 			$data = [];
-			// table transaksi
+			// table laporan detail
 			if ($filter['jenis_laporan'] == 'detail') {
-				if ($filter['jenis_transaksi'] == 'penjualan') {
-					$transaksi	= $this->laporan->getDetailPenjualan($cari, $offset, $limit, $order, $filter);
-					$countData	= $this->laporan->countDetailPenjualan($cari, $filter);
-				} else {
-					$transaksi	= $this->laporan->getDetailRetur($cari, $offset, $limit, $order, $filter);
-					$countData	= $this->laporan->countDetailRetur($cari, $filter);
-				}
+				$transaksi	= $this->laporan->getDetail($cari, $offset, $limit, $order, $filter);
+				$countData	= $this->laporan->countDetail($cari, $filter);
 				
 				$before	= '';
 				foreach($transaksi as $i) {
@@ -101,39 +95,42 @@
 					$row[]	= ($i['kode_transaksi'] != $before) ? Globals::dateView($i['tanggal_transaksi']) : '';
 					$row[]	= ($i['kode_transaksi'] != $before) ? $i['faktur_jual'] : '';
 					$row[]	= ($i['kode_transaksi'] != $before) ? $i['surat_jalan'] : '';
-					$row[]	= ($i['kode_transaksi'] != $before) ? $i['pelanggan'] : '';
+					$row[]	= ($i['kode_transaksi'] != $before) ? $i['nama_pelanggan'] : '';
 					$row[]	= $i['kode_barang'];
 					$row[]	= $i['nama_barang'];
 					$row[]	= $i['qty_produk'];
 					$row[]	= $i['satuan'];
-					$row[]	= Globals::moneyView($i['harga_produk']);
-					$row[]	= Globals::moneyView($i['diskon_produk']);
-					$row[]	= Globals::moneyView($i['jumlah_produk']);
-					$row[]	= ($i['kode_transaksi'] != $before) ? Globals::moneyView($i['diskon_luar']) : '';
-					$row[]	= ($i['kode_transaksi'] != $before) ? Globals::moneyView($i['dpp']) : '';
+					$row[]	= Globals::moneyDisplay($i['harga_produk']);
+					$row[]	= Globals::moneyDisplay($i['diskon_produk']);
+					$row[]	= Globals::moneyDisplay($i['jumlah_produk']);
+					if ($filter['jenis_transaksi'] == 'penjualan')
+					$row[]	= ($i['kode_transaksi'] != $before) ? Globals::moneyDisplay($i['diskon_luar']) : '';
+					$row[]	= ($i['kode_transaksi'] != $before) ? Globals::moneyDisplay($i['dpp']) : '';
 					$row[]	= ($i['kode_transaksi'] != $before) ? $i['besar_ppn'] : '';
-					$row[]	= ($i['kode_transaksi'] != $before) ? Globals::moneyView($i['nilai_ppn']) : '';
-					$row[]	= ($i['kode_transaksi'] != $before) ? Globals::moneyView($i['total']) : '';
+					$row[]	= ($i['kode_transaksi'] != $before) ? Globals::moneyDisplay($i['nilai_ppn']) : '';
+					$row[]	= ($i['kode_transaksi'] != $before) ? Globals::moneyDisplay($i['total']) : '';
 					
 					$data[] = $row;
 					$before	= $i['kode_transaksi'];
 				}
 			}
-			// end table transaksi
+			// end table laporan detail
 			
 			// table laporan bulanan
 			else if($filter['jenis_laporan'] == 'bulanan') {
-				$transaksi	= $this->laporan_penjualan->getJurnal($cari, $offset, $limit, $order, $filter);
-				$countData	= $this->laporan_penjualan->countJurnal($cari, $filter);
+				$transaksi	= $this->laporan->getBulanan($filter, $order);
+				$countData	= $this->laporan->countBulanan($filter);
 				
 				foreach($transaksi as $k) {
 					$row	= [];
-					$row[]	= ++$offset.'.';
-					$row[]	= $k['bulan'];
+					// $row[]	= ++$offset.'.';
+					$row[]	= $k['nama_bulan'];
 					$row[]	= $k['qty'];
-					$row[]	= $k['jumlah'];
-					$row[]	= $k['diskon'];
-					$row[]	= $k['total'];
+					$row[]	= Globals::moneyDisplay($k['jumlah']);
+					if ($filter['jenis_transaksi'] == 'penjualan') {
+						$row[]	= Globals::moneyDisplay($k['diskon']);
+						$row[]	= Globals::moneyDisplay($k['total']);
+					}
 					
 					$data[] = $row;
 				}

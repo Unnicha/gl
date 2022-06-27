@@ -36,7 +36,7 @@
 								<tr>
 									<td><?= ++$num ?>.</td>
 									<td><?= $p['faktur_jual'] ?></td>
-									<td><?= $p['tanggal_transaksi'] ?></td>
+									<td><?= $p['tanggal_bayar'] ?></td>
 									<td><?= $p['jatuh_tempo'] ?></td>
 									<td><?= $p['mata_uang'] ?></td>
 									<td class="text-right"><?= $p['jumlah_tagihan'] ?></td>

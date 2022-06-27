@@ -102,8 +102,8 @@
 			},
 			'columns' : [
 				{ name: 'num' },
-				{ name: 'tanggal_transaksi' },
-				{ name: 'piutang.kode_transaksi' },
+				{ name: 'tanggal_bayar' },
+				{ name: 'kode_bayar' },
 				{ name: 'kode_akun' },
 				{ name: 'nama_akun' },
 				// { name: 'ket_jurnal' },
@@ -115,9 +115,6 @@
 			'scrollX'			: true,
 			'scrollCollapse'	: true,
 			'columnDefs'		: [
-				// { 'width': '100', 'targets': [6,7,8] },
-				{ 'class': 'text-right px-3', 'targets': [5,6] },
-				{ 'class': 'text-right px-3 font-weight-bold', 'targets': [7] },
 				{ 'sortable': false, 'targets': [0,5,6,7] },
 			],
 			// 'dom'			: '<"row mb-2"<"col"B>>'

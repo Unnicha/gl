@@ -21,7 +21,7 @@
 					<option value="">-Pilih Invoice-</option>
 					<?php foreach($penjualan as $p) : ?>
 					<?php $pilih = (set_value('invoice') == $p['faktur_jual']) ? 'selected' : '' ?>
-					<option value="<?=$p['faktur_jual']?>" data-subtext="<?=$p['tanggal_transaksi']?>" <?=$pilih?>><?= $p['faktur_jual'] ?></option>
+					<option value="<?=$p['faktur_jual']?>" data-subtext="<?=$p['tanggal_bayar']?>" <?=$pilih?>><?= $p['faktur_jual'] ?></option>
 					<?php endforeach; ?>
 				</select>
 				<small class="text-danger" id="err-invoice"></small>

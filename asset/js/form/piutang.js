@@ -26,7 +26,7 @@ function maskDate() {
 }
 maskDate()
 
-if ($('#kode_transaksi').val() != undefined) {
+if ($('#kode_bayar').val() != undefined) {
 	showPiutang()
 }
 
@@ -86,7 +86,7 @@ function showPiutang() {
 		type	: 'post',
 		url		: base_url+'piutang/showPiutang',
 		data	: {
-			'kode_pembayaran' : $('#kode_transaksi').val(),
+			'kode_bayar' : $('#kode_bayar').val(),
 			'penjualan' : $('#penjualan').val(),
 		},
 		success : function(data) {
@@ -105,7 +105,7 @@ function addPiutang() {
 		type	: 'post',
 		url		: base_url+'piutang/addPiutang',
 		data	: {
-			'kode_bayar'	: $('#kode_transaksi').val(),
+			'kode_bayar'	: $('#kode_bayar').val(),
 			'pelanggan'		: $('#pelanggan').val(),
 			'mata_uang'		: $('#mata_uang').val(),
 			'id_last'		: $("body tbody").children("tr.piutang-row").length,
@@ -125,7 +125,7 @@ function editPiutang(id_row) {
 		url		: base_url+'piutang/editPiutang',
 		data	: {
 			mata_uang	: $('#mata_uang').val(),
-			kode_bayar	: $('#kode_transaksi').val(),
+			kode_bayar	: $('#kode_bayar').val(),
 			id_row		: id_row,
 			invoice		: $('#faktur_jual'+id_row).val(),
 			bayar		: $('#jumlah_dibayar'+id_row).val(),

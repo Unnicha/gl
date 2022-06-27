@@ -12,7 +12,7 @@
 	</div>
 	
 	<form id="myForm" name="myForm" action="" method="post" novalidate>
-		<input type="hidden" name="kode_transaksi" id="kode_transaksi" value="<?= $pembayaran['kode_transaksi'] ?>">
+		<input type="hidden" name="kode_bayar" id="kode_bayar" value="<?= $pembayaran['kode_bayar'] ?>">
 		
 		<div class="card mb-4">
 			<div class="card-body">
@@ -39,7 +39,7 @@
 											<i class="bi bi-calendar icon-small"></i>
 										</span>
 									</div>
-									<input type="text" name="tanggal" id="tanggal" data-target="#err-tanggal" class="form-control datepicker" min="<?=$min_date?>" placeholder="dd/mm/yyyy" value="<?= $pembayaran['tanggal_transaksi'] ?>" autocomplete="off" required>
+									<input type="text" name="tanggal" id="tanggal" data-target="#err-tanggal" class="form-control datepicker" min="<?=$min_date?>" placeholder="dd/mm/yyyy" value="<?= $pembayaran['tanggal_bayar'] ?>" autocomplete="off" required>
 								</div>
 								<p class="mb-0" id="err-tanggal"></p>
 							</div>

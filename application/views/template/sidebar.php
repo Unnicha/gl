@@ -124,6 +124,9 @@
 			<span class="menu-arrow"><i class="bi bi-chevron-right"></i></span>
 		</a>
 		<div class="menus collapse" id="submenu_laporan_trasaksi" aria-labelledby="menu_laporan_trasaksi">
+			<a class="sidebar-submenu nav-link" href="<?= base_url() ?>laporan_serba_serbi" data-id="laporan_serba_serbi">
+				Serba Serbi
+			</a>
 			<a class="sidebar-submenu nav-link" href="<?= base_url() ?>laporan_penjualan" data-id="laporan_penjualan">
 				Penjualan & Retur
 			</a>
@@ -133,11 +136,8 @@
 			<a class="sidebar-submenu nav-link" href="<?= base_url() ?>laporan_piutang" data-id="laporan_piutang">
 				Piutang & Pembayaran
 			</a>
-			<a class="sidebar-submenu nav-link" href="<?= base_url() ?>laporan_utang" data-id="laporan_utang">
+			<a class="sidebar-submenu nav-link" href="<?= base_url() ?>laporan_hutang" data-id="laporan_hutang">
 				Hutang & Pembayaran
-			</a>
-			<a class="sidebar-submenu nav-link" href="<?= base_url() ?>laporan_serba_serbi" data-id="laporan_serba_serbi">
-				Transaksi Lainnya
 			</a>
 		</div>
 		

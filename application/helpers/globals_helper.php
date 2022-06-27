@@ -17,6 +17,15 @@ class Globals
 		
 		return $config_app;
 	}
+	
+	/**
+	 * tampilan uang untuk table
+	 */
+	public static function moneyDisplay($money)
+	{
+		$money = number_format($money,2,',','.');
+		return '<span class="float-right">'.$money.'</span>';
+	}
 		
 	/**
 	 * mengubah data ke format tampilan uang
@@ -83,3 +92,4 @@ class Globals
 		}
 	}
 }
+

@@ -48,15 +48,14 @@
 			},
 			'columns' : [
 				{ name: 'num' },
-				{ name: 'tanggal_transaksi' },
-				{ name: 'piutang.kode_transaksi' },
-				{ name: 'total_transaksi' },
+				{ name: 'tanggal_bayar' },
+				{ name: 'piutang.kode_bayar' },
+				{ name: 'total_bayar' },
 				{ name: 'act' },
 			],
 			'scrollX'			: true,
 			'scrollCollapse'	: true,
 			'columnDefs'		: [
-				{ 'class': 'text-right px-3', 'targets': [4] },
 				{ 'sortable': false, 'targets': [4,5] },
 			],
 			// 'dom'			: '<"row mb-2"<"col"B>>'

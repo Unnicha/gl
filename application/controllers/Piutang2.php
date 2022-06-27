@@ -79,18 +79,18 @@
 				
 				$row	= [];
 				$row[]	= ++$offset.'.';
-				$row[]	= Globals::dateView($k['tanggal_transaksi']);
-				$row[]	= $k['kode_transaksi'];
+				$row[]	= Globals::dateView($k['tanggal_bayar']);
+				$row[]	= $k['kode_bayar'];
 				$row[]	= $k['nama_pelanggan'];
-				$row[]	= Globals::moneyView($k['jumlah_bayar']);
+				$row[]	= Globals::moneyDisplay($k['jumlah_bayar']);
 				$row[]	= '
-					<a class="btn-detail badge badge-primary badge-action" data-id="'.$k['kode_transaksi'].'" data-toggle="tooltip" data-placement="left" title="Detail">
+					<a class="btn-detail badge badge-primary badge-action" data-id="'.$k['kode_bayar'].'" data-toggle="tooltip" data-placement="left" title="Detail">
 						<i class="bi bi-info-circle icon-medium"></i>
 					</a>
-					<a href="'.base_url('piutang/edit/'.$k['kode_transaksi']).'" class="badge badge-info badge-action" data-toggle="tooltip" data-placement="left" title="Ubah">
+					<a href="'.base_url('piutang/edit/'.$k['kode_bayar']).'" class="badge badge-info badge-action" data-toggle="tooltip" data-placement="left" title="Ubah">
 						<i class="bi bi-pencil-square icon-medium"></i>
 					</a>
-					<a class="btn-hapus badge badge-danger badge-action" data-id="'.$k['kode_transaksi'].'" data-toggle="tooltip" data-placement="right" title="Hapus">
+					<a class="btn-hapus badge badge-danger badge-action" data-id="'.$k['kode_bayar'].'" data-toggle="tooltip" data-placement="right" title="Hapus">
 					<i class="bi bi-trash icon-medium"></i>
 					</a>';
 				
@@ -141,7 +141,7 @@
 		public function edit($id)
 		{
 			$pembayaran =  $this->piutang->getById($id);
-			$pembayaran['tanggal_transaksi'] = Globals::dateView($pembayaran['tanggal_transaksi']);
+			$pembayaran['tanggal_bayar'] = Globals::dateView($pembayaran['tanggal_bayar']);
 			
 			$data['title']		= 'Ubah Pembayaran';
 			$data['pembayaran']	= $pembayaran;
@@ -151,7 +151,7 @@
 			$data['min_date']	= $this->min_date;
 			$data['max_date']	= $this->max_date;
 			
-			$this->form_validation->set_rules('kode_transaksi', 'Kode Transaksi', 'required');
+			$this->form_validation->set_rules('kode_bayar', 'Kode Transaksi', 'required');
 			$this->form_validation->set_rules('pelanggan', 'Pelanggan', 'required');
 			$this->form_validation->set_rules('akun_asal', 'Rekening Asal', 'required');
 			$this->form_validation->set_rules('tanggal', 'Tanggal Pembayaran', 'required');
@@ -171,10 +171,10 @@
 
 		public function detail()
 		{
-			$kode_transaksi	= $_REQUEST['id'];
+			$kode_bayar	= $_REQUEST['id'];
 			
-			$piutang	= $this->piutang->getById($kode_transaksi);
-			$pembayaran	= $this->piutang->getDetail($kode_transaksi);
+			$piutang	= $this->piutang->getById($kode_bayar);
+			$pembayaran	= $this->piutang->getDetail($kode_bayar);
 			$total		= 0;
 			foreach ($pembayaran as $p) {
 				$total = $total + $p['jumlah_bayar'];
@@ -224,7 +224,7 @@
 			if ($this->input->post('penjualan', true))
 			$transaksi	= $this->penjualan->getById($this->input->post('penjualan', true));
 			else
-			$transaksi	= $this->piutang->getById($this->input->post('kode_transaksi', true));
+			$transaksi	= $this->piutang->getById($this->input->post('kode_bayar', true));
 			
 			if ($transaksi) {
 				$pelanggan	= $this->pelanggan->getById($transaksi['pelanggan']);
@@ -247,8 +247,8 @@
 		public function showPiutang()
 		{
 			// untuk edit pembayaran piutang
-			if ($this->input->post('kode_pembayaran', true))
-			$piutang = $this->piutang->getDetail($this->input->post('kode_pembayaran', true));
+			if ($this->input->post('kode_bayar', true))
+			$piutang = $this->piutang->getDetail($this->input->post('kode_bayar', true));
 			// untuk tambah pembayaran dengan kode penjualan tertentu
 			else
 			$piutang = [$this->penjualan->getById($this->input->post('penjualan', true))];
@@ -289,7 +289,7 @@
 					$tagihan	= ($jual['total_produk'] - $jual['diskon_luar']) * $ppn / 100;
 					
 					$jual['jumlah_tagihan']		= Globals::moneyView($tagihan);
-					$jual['tanggal_transaksi']	= Globals::dateView($jual['tanggal_transaksi']);
+					$jual['tanggal_bayar']	= Globals::dateView($jual['tanggal_bayar']);
 					$jual['jatuh_tempo']		= Globals::dateView($jual['jatuh_tempo']);
 					$jual['status']				= ($jual['mata_uang'] == $mata_uang) ? '' : 'disabled';
 					
@@ -312,7 +312,7 @@
 		
 		public function deletePiutang() 
 		{
-			$data['text']	= 'Yakin ingin menghapus produk?';
+			$data['text']	= 'Yakin ingin menghapus piutang?';
 			$data['button']	= '
 				<a class="btn btn-danger" onClick="fixDelete('.$_REQUEST['id'].')">Hapus</a>
 				<button type="button" class="btn btn-outline-secondary" data-dismiss="modal" tabindex="1">
@@ -351,7 +351,7 @@
 				<tr class="piutang-row" id="piutangRow'.$id_row.'" data-id="'.$id_row.'">
 					<td>'.($id_row + 1).'.</td>
 					<td>'.$penjualan['faktur_jual'].' <input type="hidden" name="faktur_jual[]" id="faktur_jual'.$id_row.'" value="'.$penjualan['faktur_jual'].'"> </td>
-					<td>'.Globals::dateView($penjualan['tanggal_transaksi']).'</td>
+					<td>'.Globals::dateView($penjualan['tanggal_bayar']).'</td>
 					<td>'.Globals::dateView($penjualan['jatuh_tempo']).'</td>
 					<td class="text-right">'.Globals::moneyView($tagihan).' <input type="hidden" name="jumlah_tagihan[]" id="jumlah_tagihan'.$id_row.'" value="'.$tagihan.'"> </td>
 					<td class="text-right">'.Globals::moneyView($tagihan).' <input type="hidden" name="jumlah_dibayar[]" id="jumlah_dibayar'.$id_row.'" value="'.$tagihan.'"> </td>

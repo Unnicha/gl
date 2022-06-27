@@ -155,7 +155,7 @@
 							->join('utang_bayar', 'utang_bayar.faktur_beli = pembelian.faktur_beli', 'left')
 							->where(['kode_supplier'=>$kode_supplier, 'mata_uang'=>$mata_uang, 'jenis_pembayaran'=>'Kredit'])
 							->group_start()
-								->where('kode_bayar', NULL)
+								->where('kode_sub_bayar', NULL)
 								->or_where_in('pembelian.faktur_beli', $saved)
 							->group_end()
 							->get('pembelian')->result_array();

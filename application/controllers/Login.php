@@ -14,8 +14,10 @@
 	
 		public function index() 
 		{
+			$data['redirect_to'] = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
+			
 			if ($this->input->post() == NULL) {
-				$this->load->view('login');
+				$this->load->view('login', $data);
 			} else {
 				$username	= $this->input->post('username', true);
 				$password	= $this->input->post('password', true);
@@ -27,13 +29,15 @@
 					redirect('login');
 				} else {
 					$sess = [
-						'id_user'	=> $cek['id_user'],
-						'username'	=> $username,
-						'nama_user'	=> $cek['nama'],
-						'tipe_user'	=> $cek['tipe'],
+						'id_user'		=> $cek['id_user'],
+						'username'		=> $username,
+						'nama_user'		=> $cek['nama'],
+						'tipe_user'		=> $cek['tipe'],
 						// 'key'		=> $cek['apikey'],
 					];
 					$this->session->set_userdata($sess);
+					$this->session->set_flashdata('redirect_to', $this->input->post('redirect_to', true));
+					
 					// re-hash password
 					$this->admin->reHashPassword($cek['id_user'], $password);
 					

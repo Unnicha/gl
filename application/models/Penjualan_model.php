@@ -155,7 +155,7 @@
 							->join('piutang_bayar', 'piutang_bayar.faktur_jual = penjualan.faktur_jual', 'left')
 							->where(['kode_pelanggan'=>$kode_pelanggan, 'mata_uang'=>$mata_uang, 'jenis_pembayaran'=>'Kredit'])
 							->group_start()
-								->where('kode_bayar', NULL)
+								->where('kode_sub_bayar', NULL)
 								->or_where_in('penjualan.faktur_jual', $saved)
 							->group_end()
 							->get('penjualan')->result_array();
@@ -286,3 +286,4 @@
 		}
 	}
 ?>
+
